@@ -78,7 +78,7 @@ The MVP covers:
 
 ### Why this order
 
-Building the API first gives the portal and future consumers a single source of truth, avoiding duplicated logic that could drift apart. The frontend view presents the critical information. Calendar export was a small addition that provides immediate value. The remaining features are mostly presentation work and don’t require changes to the data model.
+Building the API first gives the portal and future consumers a single source of truth, avoiding duplicated logic that could drift apart. The frontend view presents the critical information. Calendar export was a small addition that provides immediate value. 
 
 ### Implementation details
 
@@ -87,6 +87,19 @@ Building the API first gives the portal and future consumers a single source of 
 - The cache stores the pending request rather than its result, so concurrent requests for the same country share one upstream call. Entries expire after an hour, and failed requests are evicted so the next caller retries instead of receiving the cached error.
 - Dates are calendar dates, so day counts and weekend checks are computed in UTC to avoid holidays shifting by a day in time zones west of UTC.
 - The frontend picks the user's country from the browser's language preferences (potential limitation; naive) and falls back to the United Kingdom.
+
+#### Dependencies
+
+Runtime:
+
+- [`ical-generator`](https://www.npmjs.com/package/ical-generator) builds the `.ics` export; the iCalendar format has enough escaping, line-folding and time zone rules to be worth delegating.
+
+Development only (code style and bundling):
+
+- [`@biomejs/biome`](https://www.npmjs.com/package/@biomejs/biome) replaces a separate formatter and linter with one tool.
+- [`vite`](https://www.npmjs.com/package/vite) and [`@vitejs/plugin-react`](https://www.npmjs.com/package/@vitejs/plugin-react) bundle the frontend.
+- [`vitest`](https://www.npmjs.com/package/vitest), [`jsdom`](https://www.npmjs.com/package/jsdom) and the [`@testing-library`](https://www.npmjs.com/org/testing-library) packages run the frontend tests in a simulated browser.
+
 
 ### Not yet implemented
 
