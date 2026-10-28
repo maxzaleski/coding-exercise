@@ -33,6 +33,13 @@ describe('api client', () => {
     );
   });
 
+  it('requests the country list', async () => {
+    const fetchSpy = mockFetch(Response.json([{ countryCode: 'GB', name: 'United Kingdom' }]));
+
+    await expect(api.countries()).resolves.toEqual([{ countryCode: 'GB', name: 'United Kingdom' }]);
+    expect(fetchSpy).toHaveBeenCalledWith('/api/countries', expect.anything());
+  });
+
   it('surfaces the backend error message on failure', async () => {
     mockFetch(Response.json({ error: 'Unknown country code' }, { status: 404 }));
 

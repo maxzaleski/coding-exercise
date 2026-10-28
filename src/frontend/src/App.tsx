@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { HolidayGreeting, HolidayList } from './components';
+import { CountrySelect, HolidayGreeting, HolidayList } from './components';
 import type { HolidaySummary } from './lib';
 import { api, countryName, detectCountryCode, flagUrl } from './lib';
 
@@ -9,12 +9,13 @@ type HolidaysState =
   | { status: 'loaded'; holidays: HolidaySummary[] };
 
 function App() {
-  const [countryCode] = useState(detectCountryCode);
+  const [countryCode, setCountryCode] = useState(detectCountryCode);
   const [state, setState] = useState<HolidaysState>({ status: 'loading' });
   const flag = flagUrl(countryCode);
 
   useEffect(() => {
     const controller = new AbortController();
+    setState({ status: 'loading' });
 
     api
       .holidays(countryCode, controller.signal)
@@ -33,6 +34,7 @@ function App() {
       <header className="page-header">
         {flag && <img className="flag" src={flag} alt="" />}
         <h1>Public holidays in {countryName(countryCode)}</h1>
+        <CountrySelect value={countryCode} onChange={setCountryCode} />
         {state.status === 'loaded' && state.holidays.length > 0 && (
           <a className="button" href={api.calendarUrl(countryCode)} download>
             Add to Outlook calendar

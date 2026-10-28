@@ -8,6 +8,12 @@ export interface HolidaySummary {
   weekend: 'Yes' | 'No';
 }
 
+/** Country as returned by `GET /api/countries`. */
+export interface CountrySummary {
+  countryCode: string;
+  name: string;
+}
+
 /** Body of every non-2xx API response. */
 export interface ErrorResponse {
   error: string;

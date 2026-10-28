@@ -1,6 +1,6 @@
-import type { ErrorResponse, HolidaySummary } from '@shared/types';
+import type { CountrySummary, ErrorResponse, HolidaySummary } from '@shared/types';
 
-export type { HolidaySummary };
+export type { CountrySummary, HolidaySummary };
 
 export class ApiError extends Error {
   constructor(
@@ -14,6 +14,11 @@ export class ApiError extends Error {
 
 export class ApiClient {
   constructor(private readonly baseUrl = '/api') {}
+
+  /** Get the countries holidays are available for, sorted by name. */
+  countries(signal?: AbortSignal): Promise<CountrySummary[]> {
+    return this.request('/countries', signal);
+  }
 
   /** Get this year's holidays for a country, given its two-letter ISO code. */
   holidays(countryCode: string, signal?: AbortSignal): Promise<HolidaySummary[]> {

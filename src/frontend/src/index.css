@@ -27,8 +27,18 @@ body {
   font-size: 1.5rem;
 }
 
-.button {
+.country-select {
   margin-left: auto;
+  padding: 0.5rem;
+  border: 1px solid #d1d9e0;
+  border-radius: 6px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  font-size: 0.875rem;
+}
+
+.button {
   padding: 0.5rem 1rem;
   border-radius: 6px;
   background: #0f6cbd;

@@ -2,9 +2,9 @@ import type { ServerResponse } from 'node:http';
 import { createServer } from 'node:http';
 import { toICalendar } from './calendar.js';
 import type { Holiday } from './holidays.js';
-import { fetchPublicHolidays, HolidaysApiError } from './holidays.js';
+import { fetchAvailableCountries, fetchPublicHolidays, HolidaysApiError } from './holidays.js';
 import { DAY_MS } from './shared/time.js';
-import type { ErrorResponse, HolidaySummary } from './shared/types.js';
+import type { CountrySummary, ErrorResponse, HolidaySummary } from './shared/types.js';
 import { serveFrontend } from './static.js';
 
 const port = Number(process.env.PORT ?? 8080);
@@ -44,6 +44,24 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  // GET `/api/countries`
+  if (req.method === 'GET' && pathname === '/api/countries') {
+    try {
+      const countries = await fetchAvailableCountries();
+      const summaries: CountrySummary[] = countries
+        .map(({ countryCode }) => ({
+          countryCode,
+          name: countryNames.of(countryCode) ?? countryCode,
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name, 'en-GB'));
+      sendJson(res, 200, summaries);
+    } catch (error) {
+      console.error(error);
+      sendJson<ErrorResponse>(res, 502, { error: 'Failed to fetch countries' });
+    }
+    return;
+  }
+
   // GET `/api/holidays/{countryCode}` and `/api/holidays/{countryCode}/calendar.ics`
   const holidaysMatch =
     req.method === 'GET'
@@ -66,7 +84,7 @@ const server = createServer(async (req, res) => {
         return;
       }
 
-      // Otehrwise, summarise and return the holidays as JSON.
+      // Otherwise, summarise and return the holidays as JSON.
       const today = new Date().toISOString().slice(0, 10);
       sendJson(
         res,
