@@ -1,7 +1,7 @@
 import { createServer } from 'node:http';
 import type { ServerResponse } from 'node:http';
 import { constants } from 'node:http2';
-import { fetchHolidays, HolidaysApiError } from './holidays.js';
+import { fetchPublicHolidays, HolidaysApiError } from './holidays.js';
 import type { Holiday } from './holidays.js';
 import type { ErrorResponse, HolidaySummary } from './shared/types.js';
 import { serveFrontend } from './static.js';
@@ -48,7 +48,7 @@ const server = createServer(async (req, res) => {
     req.method === 'GET' ? /^\/api\/holidays\/([A-Za-z]{2})$/.exec(pathname) : null;
   if (holidaysMatch?.[1]) {
     try {
-      const holidays = await fetchHolidays(holidaysMatch[1].toUpperCase());
+      const holidays = await fetchPublicHolidays(holidaysMatch[1].toUpperCase());
       const today = new Date().toISOString().slice(0, 10);
       sendJson(
         res,
