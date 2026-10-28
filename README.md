@@ -104,3 +104,7 @@ Development only (code style and bundling):
 ### Not yet implemented
 
 The remaining items in the requirements list above are mostly cosmetic and are independent of the data layer.
+
+## Disclosure
+
+Certain lines (notably documentation and CSS strings) were generated using GH Copilot via VSCode.
