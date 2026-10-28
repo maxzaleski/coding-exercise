@@ -27,6 +27,12 @@ describe('api client', () => {
     );
   });
 
+  it('builds the calendar URL from the base URL and country code', () => {
+    expect(new ApiClient('https://example.test/api').calendarUrl('GB')).toBe(
+      'https://example.test/api/holidays/GB/calendar.ics',
+    );
+  });
+
   it('surfaces the backend error message on failure', async () => {
     mockFetch(Response.json({ error: 'Unknown country code' }, { status: 404 }));
 

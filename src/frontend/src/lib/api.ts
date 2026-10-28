@@ -20,6 +20,11 @@ export class ApiClient {
     return this.request(`/holidays/${encodeURIComponent(countryCode)}`, signal);
   }
 
+  /** URL of an iCalendar file with this year's holidays for a country (to be imported into Outlook). */
+  calendarUrl(countryCode: string): string {
+    return `${this.baseUrl}/holidays/${encodeURIComponent(countryCode)}/calendar.ics`;
+  }
+
   /** Fetch a JSON resource from the API, throwing an `ApiError` on any non-2xx response. */
   private async request<T>(path: string, signal?: AbortSignal): Promise<T> {
     const response = await fetch(`${this.baseUrl}${path}`, {

@@ -33,6 +33,11 @@ function App() {
       <header className="page-header">
         {flag && <img className="flag" src={flag} alt="" />}
         <h1>Public holidays in {countryName(countryCode)}</h1>
+        {state.status === 'loaded' && state.holidays.length > 0 && (
+          <a className="button" href={api.calendarUrl(countryCode)} download>
+            Add to Outlook calendar
+          </a>
+        )}
       </header>
 
       {state.status === 'loading' && (

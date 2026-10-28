@@ -1,10 +1,12 @@
 import { createServer } from 'node:http';
 import type { ServerResponse } from 'node:http';
 import { constants } from 'node:http2';
+import { toICalendar } from './calendar.js';
 import { fetchPublicHolidays, HolidaysApiError } from './holidays.js';
 import type { Holiday } from './holidays.js';
 import type { ErrorResponse, HolidaySummary } from './shared/types.js';
 import { serveFrontend } from './static.js';
+import { DAY_MS } from './shared/time.js';
 
 const port = Number(process.env.PORT ?? 8080);
 
@@ -15,7 +17,7 @@ function summarise(holiday: Holiday, today: string): HolidaySummary {
   const holidayDate = new Date(holiday.date);
 
   // Calculate the number of days until the holiday and whether it falls on a weekend.
-  const days = (holidayDate.getTime() - Date.parse(today)) / (24 * 60 * 60 * 1000);
+  const days = (holidayDate.getTime() - Date.parse(today)) / DAY_MS;
   const dayOfWeek = holidayDate.getUTCDay();
 
   return {
@@ -43,12 +45,29 @@ const server = createServer(async (req, res) => {
     return;
   }
 
-  // GET `/api/holidays/{countryCode}`
+  // GET `/api/holidays/{countryCode}` and `/api/holidays/{countryCode}/calendar.ics`
   const holidaysMatch =
-    req.method === 'GET' ? /^\/api\/holidays\/([A-Za-z]{2})$/.exec(pathname) : null;
+    req.method === 'GET'
+      ? /^\/api\/holidays\/([A-Za-z]{2})(\/calendar\.ics)?$/.exec(pathname)
+      : null;
   if (holidaysMatch?.[1]) {
+    const countryCode = holidaysMatch[1].toUpperCase();
     try {
-      const holidays = await fetchPublicHolidays(holidaysMatch[1].toUpperCase());
+      const holidays = await fetchPublicHolidays(countryCode);
+
+      // If the request is for the iCalendar file, generate and return it.
+      if (holidaysMatch[2]) {
+        const country = countryNames.of(countryCode) ?? countryCode;
+        const year = new Date().getUTCFullYear();
+        res.writeHead(200, {
+          'Content-Type': 'text/calendar; charset=utf-8',
+          'Content-Disposition': `attachment; filename="holidays-${countryCode}-${year}.ics"`,
+        });
+        res.end(toICalendar(holidays, `Public holidays in ${country}`));
+        return;
+      }
+
+      // Otehrwise, summarise and return the holidays as JSON.
       const today = new Date().toISOString().slice(0, 10);
       sendJson(
         res,
