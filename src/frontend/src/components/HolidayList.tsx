@@ -28,6 +28,7 @@ export function HolidayList({ holidays }: { holidays: HolidaySummary[] }) {
         <tbody>
           {holidays.map((holiday, index) => (
             <tr
+              // biome-ignore lint/suspicious/noArrayIndexKey: upstream repeats a holiday once per subdivision, and the list is never reordered.
               key={`${holiday.date}-${holiday.name}-${index}`}
               className={holiday.daysUntil === null ? 'holiday-past' : 'holiday-upcoming'}
             >

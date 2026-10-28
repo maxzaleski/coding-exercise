@@ -1,12 +1,11 @@
-import { createServer } from 'node:http';
 import type { ServerResponse } from 'node:http';
-import { constants } from 'node:http2';
+import { createServer } from 'node:http';
 import { toICalendar } from './calendar.js';
-import { fetchPublicHolidays, HolidaysApiError } from './holidays.js';
 import type { Holiday } from './holidays.js';
+import { fetchPublicHolidays, HolidaysApiError } from './holidays.js';
+import { DAY_MS } from './shared/time.js';
 import type { ErrorResponse, HolidaySummary } from './shared/types.js';
 import { serveFrontend } from './static.js';
-import { DAY_MS } from './shared/time.js';
 
 const port = Number(process.env.PORT ?? 8080);
 
@@ -41,7 +40,7 @@ const server = createServer(async (req, res) => {
 
   // GET `/api/health`
   if (req.method === 'GET' && pathname === '/api/health') {
-    sendJson(res, constants.HTTP_STATUS_OK, { status: 'ok' });
+    sendJson(res, 200, { status: 'ok' });
     return;
   }
 

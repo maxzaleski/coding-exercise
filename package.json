@@ -7,16 +7,21 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "npm --prefix src/frontend run build && tsc",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "test": "tsx --test 'src/*.test.ts'"
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "test": "tsx --test 'src/*.test.ts'",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "postinstall": "npm --prefix src/frontend install",
+    "prestart": "npm run build",
+    "audit:all": "npm audit; status=$?; npm --prefix src/frontend audit && exit $status"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.6.3",
     "@types/node": "^26.6.5",
-    "prettier": "^3.9.10",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   },

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { HolidayGreeting, HolidayList } from './components';
-import { api, countryName, detectCountryCode, flagUrl } from './lib';
 import type { HolidaySummary } from './lib';
+import { api, countryName, detectCountryCode, flagUrl } from './lib';
 
 type HolidaysState =
   | { status: 'loading' }
