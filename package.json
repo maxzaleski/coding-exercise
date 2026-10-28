@@ -17,7 +17,8 @@
     "lint:fix": "biome check --write .",
     "postinstall": "npm --prefix src/frontend install",
     "prestart": "npm run build",
-    "audit:all": "npm audit; status=$?; npm --prefix src/frontend audit && exit $status"
+    "audit:all": "npm audit; status=$?; npm --prefix src/frontend audit && exit $status",
+    "clean": "node -e \"for (const p of ['dist', 'node_modules', 'src/frontend/dist', 'src/frontend/node_modules', 'coverage', 'src/frontend/coverage']) require('node:fs').rmSync(p, { recursive: true, force: true })\""
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.3",

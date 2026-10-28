@@ -40,6 +40,7 @@ Rebuild the frontend with `npm --prefix src/frontend run build` after changing i
 | `npm run typecheck`              | Type-checks the backend                                         |
 | `npm --prefix src/frontend test` | Runs the frontend tests in watch mode                           |
 | `npm run audit:all`              | Audits the backend and frontend dependencies                    |
+| `npm run clean`                  | Removes all build output and installed dependencies             |
 
 ## Requirements
 
@@ -55,8 +56,8 @@ Rebuild the frontend with `npm --prefix src/frontend run build` after changing i
 - Add a navrail or tabs to the UI. Add a new page that shows a world map with countries or regions experiencing a public holiday highlighted.
 - Add a date slider beneath the map that allows any day in the calendar year to be selected.
   - The slider should be set to today’s date (or the server mock date) by default but can be moved by the user to select any date and highlight its holidays on the map.
-- Create polyphonic versions of each country’s national anthem (as many as possible for the demo). 
-  - Play the appropriate anthem when the user selects a country or region on the map, while adding a glowing pulse effect to the country or region’s polygon that pulses in time with the music. 
+- Create polyphonic versions of each country’s national anthem (as many as possible for the demo).
+  - Play the appropriate anthem when the user selects a country or region on the map, while adding a glowing pulse effect to the country or region’s polygon that pulses in time with the music.
   - Also play the correct anthem when the user navigates to the frontend and it is a public holiday in their country.
 - ~~Add a button that allows people to add their country’s holidays in Outlook calendar.~~
 
