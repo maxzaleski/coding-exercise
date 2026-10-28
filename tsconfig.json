@@ -40,5 +40,8 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true
-  }
+  },
+  "include": ["src"],
+  // The frontend is a separate Vite project with its own tsconfig.
+  "exclude": ["src/frontend"]
 }
