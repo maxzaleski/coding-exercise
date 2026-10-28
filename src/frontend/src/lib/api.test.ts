@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { api, ApiClient, ApiError } from './client';
+import { api, ApiClient, ApiError } from './api';
 
 function mockFetch(response: Response) {
   return vi.spyOn(globalThis, 'fetch').mockResolvedValue(response);
