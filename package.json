@@ -1,0 +1,13 @@
+{
+  "name": "blackrock-th",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Maximilien Zaleski",
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.9.10"
+  }
+}
